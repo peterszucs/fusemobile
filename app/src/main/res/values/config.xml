@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="api_host">fusion-universal.com/api/v</string>
+    <string name="api_version">1</string>
+
+</resources>
