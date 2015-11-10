@@ -28,7 +28,6 @@ public class ApplicationModule {
     }
 
     @Provides
-    @Singleton
     public ApiManager providesApiManager() {
         return new ApiManager(application.getApplicationContext());
     }

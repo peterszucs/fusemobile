@@ -4,5 +4,6 @@
 
     <string name="error_empty_input_field">Please fill out the Company\'s name field.</string>
     <string name="error_input_field_length">One letter won\'t be enough.</string>
+    <string name="error_company_not_found">Company not found in the database</string>
 
 </resources>

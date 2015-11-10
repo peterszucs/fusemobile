@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import javax.inject.Inject;
 
 import peter.szucs.fusemobile.BaseApplication;
+import peter.szucs.fusemobile.R;
 import peter.szucs.fusemobile.data.ApiManager;
 import peter.szucs.fusemobile.data.model.ErrorType;
 import rx.Subscription;
@@ -37,12 +38,23 @@ public class MainPresenter {
         } else if (companyName.length() < 2) {
             view.showMessage(ErrorType.COMPANY_NAME_INVALID.getResourceId());
         } else {
-            getCompanySubscription = apiManager.createCompanySubdomainRetrofit(companyName).getCompany()
-                    .doOnSubscribe(view::showProgress)
-                    .doOnUnsubscribe(view::hideProgress)
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe(view::showResults);
+            getCompanySubscription =
+                    apiManager.createCompanySubdomainRetrofit(companyName).getCompany()
+                        .doOnSubscribe(view::showProgress)
+                        .doOnUnsubscribe(view::hideProgress)
+                        .subscribe(view::showResults,
+                                throwable -> {
+                                    view.resetView();
+                                    view.setInputFieldRed();
+
+                                    if (throwable.getMessage().contains("404")) {
+                                        view.showMessage(R.string.error_company_not_found);
+                                    } else {
+                                        view.showMessage("Something went wrong: " + throwable.getMessage());
+                                    }
+
+                                },
+                                view::hideProgress);
         }
     }
 
