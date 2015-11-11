@@ -1,17 +1,17 @@
 package peter.szucs.fusemobile.view.main;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -52,15 +52,43 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         presenter = new MainPresenter(this);
 
-        inputField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        inputField.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                presenter.startLookUp(inputField.getText().toString().trim());
+            }
+            return false;
+        });
+
+        inputField.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                presenter.startLookUp(inputField.getText().toString().trim());
+            }
+            return false;
+        });
+
+        inputField.addTextChangedListener(new TextWatcher() {
+            String beforeText = "";
+
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    presenter.startLookUp(inputField.getText().toString().trim());
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                beforeText = s.toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (presenter.getCompany() == null) {
+                    return;
                 }
-                return false;
+                if (!presenter.getCompany().getName().equals(s.toString()) && s.toString().length() < beforeText.length()) {
+                    resetView();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
+
     }
 
     private void setEnabledInput(boolean enabled) {

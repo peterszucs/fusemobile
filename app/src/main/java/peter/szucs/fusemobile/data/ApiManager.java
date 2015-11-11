@@ -1,14 +1,12 @@
 package peter.szucs.fusemobile.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import peter.szucs.fusemobile.BuildConfig;
 import peter.szucs.fusemobile.R;
 import peter.szucs.fusemobile.data.model.Company;
 import retrofit.RestAdapter;
 import rx.Observable;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 

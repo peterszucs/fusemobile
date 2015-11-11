@@ -8,10 +8,16 @@ import peter.szucs.fusemobile.data.model.Company;
 public interface MainActivityView {
 
     void showProgress();
+
     void hideProgress();
+
     void showResults(Company company);
+
     void showMessage(int messageResourceId);
+
     void showMessage(String message);
+
     void setInputFieldRed();
+
     void resetView();
 }
